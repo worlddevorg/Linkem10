@@ -67,13 +67,16 @@ def extract_data(tag):
                 for div in driver.find_elements('xpath', '//div[@class="result css-z73qjy"]'):
                     # print(type(tag),type(div),tag,div)
                     if str(tag.lower()) in str(div.text.lower()):
-                        # print(div.text)
+                        print(div.text)
                         lines = div.text.split('\n')
                         if len(lines) > 1:
                             second_line = lines[1]
                             parts = second_line.split('-')
-                            if len(parts) > 2:
+                            print(parts)
+                            if len(parts) > 1:
                                 job_role=parts[1].strip()
+                            elif len(parts) > 0:
+                                job_role=str(tag)
                         div_text = re.sub(r'https?://\S+', '', div.text)
                         name = ' '.join(div_text.split()[:2])
                         email_match = re.search(r'\b[\w\.-]+@gmail\.com\b', div_text)
@@ -102,12 +105,12 @@ def extract_data(tag):
                 except:
                     pass
                 matches_found += 1
-        extracted_workbook.save("extracted_data.xlsx")
+        extracted_workbook.save("Linkdein_emails.xlsx")
         last_processed_row+=1
         with open('last_processed_row.txt', 'w') as file:
             file.write(str(last_processed_row))
     driver.quit()
-    messagebox.showinfo("Extraction Complete", "The data extraction process has been completed successfully.")
+    messagebox.showinfo("Extraction Complete", "Data extraction process has been completed successfully.")
 
 def add_tags():
     tag = tags_entry.get()
